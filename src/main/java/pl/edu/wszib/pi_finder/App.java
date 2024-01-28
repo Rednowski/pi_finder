@@ -9,23 +9,19 @@ public class App {
 
     public static void main(String[] args) {
         int allPoints = 500000000;
-        int threadNumber = 4;
+        int threadNumber = 8;
+        Thread[] threads = new Thread[threadNumber];
         long startTime = System.currentTimeMillis();
-        Thread t1 = new Thread(new PiFinder(allPoints, threadNumber));
-        Thread t2 = new Thread(new PiFinder(allPoints, threadNumber));
-        Thread t3 = new Thread(new PiFinder(allPoints, threadNumber));
-        Thread t4 = new Thread(new PiFinder(allPoints, threadNumber));
 
-        t1.start();
-        t2.start();
-        t3.start();
-        t4.start();
+        for (int i = 0; i < threadNumber; i++){
+            threads[i] = new Thread(new PiFinder(allPoints, threadNumber));
+            threads[i].start();
+        }
 
         try {
-            t1.join();
-            t2.join();
-            t3.join();
-            t4.join();
+            for(int i = 0; i < threadNumber; i++){
+                threads[i].join();
+            }
         } catch (InterruptedException e){
             System.out.println("Something went wrong");
         }
